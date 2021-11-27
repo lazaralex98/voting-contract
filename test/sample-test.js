@@ -11,19 +11,19 @@ describe("Voting", function () {
     await votingContract.deployed();
 
     const proposalBeforeVote = await votingContract.getProposal(0);
-    expect(proposalBeforeVote).to.be.include(
-      "Web3 Vlog",
-      "You should make a vlog of you learning web3.",
-      { _hex: ethers.utils.hexlify(0), _isBigNumber: true }
-    );
+    expect(proposalBeforeVote).to.eql({
+      name: "Web3 Vlog",
+      description: "You should make a vlog of you learning web3.",
+      voteCount: 0,
+    });
 
     await votingContract.voteProposal(0);
     const proposalAfterVote = await votingContract.getProposal(0);
-    expect(proposalAfterVote).to.be.include(
-      "Web3 Vlog",
-      "You should make a vlog of you learning web3.",
-      { _hex: ethers.utils.hexlify(1), _isBigNumber: true }
-    );
+    expect(proposalAfterVote).to.eql({
+      name: "Web3 Vlog",
+      description: "You should make a vlog of you learning web3.",
+      voteCount: 1,
+    });
   });
 });
 
@@ -39,11 +39,11 @@ describe("Proposal", function () {
 
     const allProposalsBeforeProposal = await votingContract.getProposals();
     expect(allProposalsBeforeProposal).to.eql([
-      [
-        "Web3 Vlog",
-        "You should make a vlog of you learning web3.",
-        { _hex: ethers.utils.hexlify(0), _isBigNumber: true },
-      ],
+      {
+        name: "Web3 Vlog",
+        description: "You should make a vlog of you learning web3.",
+        voteCount: 0,
+      },
     ]);
 
     await votingContract.setProposal(
@@ -55,16 +55,16 @@ describe("Proposal", function () {
     // aren't structs supposed to be like objects?
     const allProposalsAfterProposal = await votingContract.getProposals();
     expect(allProposalsAfterProposal).to.eql([
-      [
-        "Web3 Vlog",
-        "You should make a vlog of you learning web3.",
-        { _hex: ethers.utils.hexlify(0), _isBigNumber: true },
-      ],
-      [
-        "Landing Page Reviews",
-        "We want more landing page reviews.",
-        { _hex: ethers.utils.hexlify(0), _isBigNumber: true },
-      ],
+      {
+        name: "Web3 Vlog",
+        description: "You should make a vlog of you learning web3.",
+        voteCount: 0,
+      },
+      {
+        name: "Landing Page Reviews",
+        description: "We want more landing page reviews.",
+        voteCount: 0,
+      },
     ]);
   });
 });
