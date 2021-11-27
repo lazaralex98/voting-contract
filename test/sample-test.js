@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 
-describe("Deploy & Vote", function () {
+describe("Voting", function () {
   it("Should return the proposal with 1 vote after voting", async function () {
     const VotingContract = await ethers.getContractFactory("VotingContract");
     const votingContract = await VotingContract.deploy(
@@ -27,7 +27,7 @@ describe("Deploy & Vote", function () {
   });
 });
 
-describe("Deploy & Propose", function () {
+describe("Proposal", function () {
   it("Should return the new list of proposals after submitting one", async function () {
     const VotingContract = await ethers.getContractFactory("VotingContract");
     const votingContract = await VotingContract.deploy(
@@ -38,19 +38,23 @@ describe("Deploy & Propose", function () {
     await votingContract.deployed();
 
     const allProposalsBeforeProposal = await votingContract.getProposals();
-    expect(allProposalsBeforeProposal).to.be.include(
-      "Web3 Vlog",
-      "You should make a vlog of you learning web3.",
-      { _hex: ethers.utils.hexlify(0), _isBigNumber: true }
-    );
+    expect(allProposalsBeforeProposal).to.eql([
+      [
+        "Web3 Vlog",
+        "You should make a vlog of you learning web3.",
+        { _hex: ethers.utils.hexlify(0), _isBigNumber: true },
+      ],
+    ]);
 
     await votingContract.setProposal(
       "Landing Page Reviews",
       "We want more landing page reviews."
     );
 
+    // why is the response an array of arrays instead of being an array of objects?
+    // aren't structs supposed to be like objects?
     const allProposalsAfterProposal = await votingContract.getProposals();
-    expect(allProposalsAfterProposal).to.include(
+    expect(allProposalsAfterProposal).to.eql([
       [
         "Web3 Vlog",
         "You should make a vlog of you learning web3.",
@@ -60,7 +64,7 @@ describe("Deploy & Propose", function () {
         "Landing Page Reviews",
         "We want more landing page reviews.",
         { _hex: ethers.utils.hexlify(0), _isBigNumber: true },
-      ]
-    );
+      ],
+    ]);
   });
 });

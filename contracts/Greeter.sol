@@ -15,11 +15,11 @@ contract VotingContract {
 
   constructor(string memory _proposal_name, string memory _proposal_description) {
     console.log("Deploying a VotingContract with first proposal:", _proposal_name);
-    proposals.push(Proposal({
-      name: _proposal_name,
-      description : _proposal_description,
-      voteCount: 0
-    }));
+    proposals.push(Proposal(
+      _proposal_name,
+      _proposal_description,
+      0
+    ));
   }
 
   function getProposals() public view returns (Proposal[] memory) {
@@ -34,11 +34,11 @@ contract VotingContract {
 
   function setProposal(string memory _proposal_name, string memory _proposal_description) public {
     console.log("Proposing video subject: '%s'", _proposal_name);
-    proposals.push(Proposal({
-      name: _proposal_name,
-      description : _proposal_description,
-      voteCount: 0
-    }));
+    proposals.push(Proposal(
+      _proposal_name,
+      _proposal_description,
+      0
+    ));
   }
 
   function voteProposal(uint _index) public {
