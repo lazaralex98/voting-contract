@@ -1,25 +1,38 @@
 const { expect } = require("chai");
+const { utils } = require("web3");
 
 describe("Voting", function () {
   it("Should return the proposal with 1 vote after voting", async function () {
+    // deploy the contract
     const VotingContract = await ethers.getContractFactory("VotingContract");
     const votingContract = await VotingContract.deploy(
       "Web3 Vlog",
       "You should make a vlog of you learning web3."
     );
-
     await votingContract.deployed();
 
+    // test initial proposal
     const proposalBeforeVote = await votingContract.getProposal(0);
-    expect(proposalBeforeVote).to.eql({
+    const proposalObjBeforeVote = {
+      name: proposalBeforeVote[0],
+      description: proposalBeforeVote[1],
+      voteCount: proposalBeforeVote[2].toNumber(),
+    };
+    expect(proposalObjBeforeVote).to.eql({
       name: "Web3 Vlog",
       description: "You should make a vlog of you learning web3.",
       voteCount: 0,
     });
 
-    await votingContract.voteProposal(0);
+    // vote for initial proposal & test it
+    votingContract.voteProposal(0);
     const proposalAfterVote = await votingContract.getProposal(0);
-    expect(proposalAfterVote).to.eql({
+    const proposalObjAfterVote = {
+      name: proposalAfterVote[0],
+      description: proposalAfterVote[1],
+      voteCount: proposalAfterVote[2].toNumber(),
+    };
+    expect(proposalObjAfterVote).to.eql({
       name: "Web3 Vlog",
       description: "You should make a vlog of you learning web3.",
       voteCount: 1,
@@ -29,16 +42,26 @@ describe("Voting", function () {
 
 describe("Proposal", function () {
   it("Should return the new list of proposals after submitting one", async function () {
+    // deploy the contract
     const VotingContract = await ethers.getContractFactory("VotingContract");
     const votingContract = await VotingContract.deploy(
       "Web3 Vlog",
       "You should make a vlog of you learning web3."
     );
-
     await votingContract.deployed();
 
+    // get an array of all proposals and convert it from an array of arrays to an array of objects, then test it
     const allProposalsBeforeProposal = await votingContract.getProposals();
-    expect(allProposalsBeforeProposal).to.eql([
+    const allProposalsBeforeProposalCleaned = allProposalsBeforeProposal.map(
+      (proposal) => {
+        return {
+          name: proposal[0],
+          description: proposal[1],
+          voteCount: proposal[2].toNumber(),
+        };
+      }
+    );
+    expect(allProposalsBeforeProposalCleaned).to.eql([
       {
         name: "Web3 Vlog",
         description: "You should make a vlog of you learning web3.",
@@ -46,7 +69,8 @@ describe("Proposal", function () {
       },
     ]);
 
-    await votingContract.setProposal(
+    // send a new proposal
+    await votingContract.sendProposal(
       "Landing Page Reviews",
       "We want more landing page reviews."
     );
@@ -54,7 +78,16 @@ describe("Proposal", function () {
     // why is the response an array of arrays instead of being an array of objects?
     // aren't structs supposed to be like objects?
     const allProposalsAfterProposal = await votingContract.getProposals();
-    expect(allProposalsAfterProposal).to.eql([
+    const allProposalsAfterProposalCleaned = allProposalsAfterProposal.map(
+      (proposal) => {
+        return {
+          name: proposal[0],
+          description: proposal[1],
+          voteCount: proposal[2].toNumber(),
+        };
+      }
+    );
+    expect(allProposalsAfterProposalCleaned).to.eql([
       {
         name: "Web3 Vlog",
         description: "You should make a vlog of you learning web3.",

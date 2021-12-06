@@ -32,7 +32,7 @@ contract VotingContract {
     return proposals[_index];
   }
 
-  function setProposal(string memory _proposal_name, string memory _proposal_description) public {
+  function sendProposal(string memory _proposal_name, string memory _proposal_description) public {
     console.log("Proposing video subject: '%s'", _proposal_name);
     proposals.push(Proposal(
       _proposal_name,
