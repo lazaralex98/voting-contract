@@ -25,7 +25,9 @@ describe("Voting", function () {
     });
 
     // vote for initial proposal & test it
-    votingContract.voteProposal(0);
+    votingContract.voteProposal(0, ethers.utils.parseEther("0.001"), {
+      gasLimit: 300000,
+    });
     const proposalAfterVote = await votingContract.getProposal(0);
     const proposalObjAfterVote = {
       name: proposalAfterVote[0],
@@ -72,7 +74,11 @@ describe("Proposal", function () {
     // send a new proposal
     await votingContract.sendProposal(
       "Landing Page Reviews",
-      "We want more landing page reviews."
+      "We want more landing page reviews.",
+      ethers.utils.parseEther("0.002"),
+      {
+        gasLimit: 300000,
+      }
     );
 
     // get an array of all proposals and convert it from an array of arrays to an array of objects, then test it

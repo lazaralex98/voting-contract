@@ -3,9 +3,16 @@ pragma solidity ^0.8.10;
 
 import "hardhat/console.sol";
 
-
 contract VotingContract {
   // TODO should be required to pay to vote/propose
+  address payable public owner; 
+
+  // events make it easier to track what happened on the blockchain even though that info is public
+  event NewProposalOrVote(
+    address indexed from,
+    uint256 timestamp,
+    string name
+  );
 
   struct Proposal {
     string name; // short name for the proposal
@@ -24,8 +31,15 @@ contract VotingContract {
   // each address gets a Voter struct
   mapping(address => Voter) public voters;
 
-  // on deployment we create an initial proposal
-  constructor(string memory _proposal_name, string memory _proposal_description) {
+  // TODO make it such that on deployment you can change proposa/vote prices
+
+  // on deployment we create an initial proposal and set prices
+  constructor(
+      string memory _proposal_name, 
+      string memory _proposal_description
+    ) {
+    owner = payable(msg.sender);
+
     proposals.push(Proposal(
       _proposal_name,
       _proposal_description,
@@ -44,10 +58,19 @@ contract VotingContract {
     return proposals[_index];
   }
 
-  // checks if address has proposed yet and then add his new Proposal to the proposals array
-  function sendProposal(string memory _proposal_name, string memory _proposal_description) public {
+  // checks if address has proposed yet and if enough funds and then add his new Proposal to the proposals array
+  function sendProposal(
+      string memory _proposal_name, 
+      string memory _proposal_description,
+      uint256 _payAmount
+    ) public payable {
     Voter storage sender = voters[msg.sender];
     require(!sender.proposed, "You already proposed.");
+
+    require(_payAmount <= 0.002 ether, "Insufficient Ether provided");
+
+    (bool success, ) = owner.call{value: _payAmount}("");
+    require(success, "Failed to send money");
     
     proposals.push(Proposal(
       _proposal_name,
@@ -55,14 +78,23 @@ contract VotingContract {
       0
     ));
     sender.proposed = true;
+
+    emit NewProposalOrVote(msg.sender, block.timestamp, "proposal");
   }
 
-  // check if address has voted and vote for a Proposal based on its index in the proposals array
-  function voteProposal(uint _index) public {
+  // check if address has voted and if enough funds and vote for a Proposal based on its index in the proposals array
+  function voteProposal(uint _index, uint256 _payAmount) public payable {
     Voter storage sender = voters[msg.sender];
     require(!sender.voted, "You already voted.");
 
+    require(_payAmount <= 0.001 ether, "Insufficient Ether provided");
+
+    (bool success, ) = owner.call{value: _payAmount}("");
+    require(success, "Failed to send money");
+
     proposals[_index].voteCount += 1;
     sender.voted = true;
+
+    emit NewProposalOrVote(msg.sender, block.timestamp, "vote");
   }
 }
