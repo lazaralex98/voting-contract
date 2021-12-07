@@ -75,8 +75,7 @@ describe("Proposal", function () {
       "We want more landing page reviews."
     );
 
-    // why is the response an array of arrays instead of being an array of objects?
-    // aren't structs supposed to be like objects?
+    // get an array of all proposals and convert it from an array of arrays to an array of objects, then test it
     const allProposalsAfterProposal = await votingContract.getProposals();
     const allProposalsAfterProposalCleaned = allProposalsAfterProposal.map(
       (proposal) => {
