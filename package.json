@@ -14,5 +14,12 @@
     "solhint": "^3.3.6",
     "solhint-plugin-prettier": "^0.0.5",
     "web3": "^1.6.1"
+  },
+  "scripts": {
+    "clean": "npx hardhat clean",
+    "chain": "npx hardhat node",
+    "deploy": "npx hardhat run --network localhost scripts/deploy.js",
+    "deploy:rinkeby": "npx hardhat run --network rinkeby scripts/deploy.js",
+    "test": "npx hardhat test"
   }
 }
