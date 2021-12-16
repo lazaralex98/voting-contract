@@ -1,5 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import etherstore from "ethers";
 
 const currentProposals = [
   {
@@ -33,7 +35,7 @@ export default function Home() {
           </p>
         </section>
         <section className="w-full p-8 my-8 border-2 border-dashed border-gray-400 rounded">
-          <h2 className="text-red-500 text-2xl font-extrabold mb-4">
+          <h2 className="text-red-500 text-2xl font-medium mb-4">
             All current proposals
           </h2>
           <ul className="text-gray-800">
