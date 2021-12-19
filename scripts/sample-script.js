@@ -2,12 +2,15 @@ const hre = require("hardhat");
 
 async function main() {
   // We get the contract to deploy
-  const Greeter = await hre.ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  const VotingContract = await hre.ethers.getContractFactory("VotingContract");
+  const votingContract = await VotingContract.deploy(
+    "Web3 Vlog!",
+    "It would really fun to watch a video of you learning web3."
+  );
 
-  await greeter.deployed();
+  await votingContract.deployed();
 
-  console.log("Greeter deployed to:", greeter.address);
+  console.log("VotingContract deployed to:", votingContract.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
