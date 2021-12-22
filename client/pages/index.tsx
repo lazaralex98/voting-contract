@@ -29,7 +29,7 @@ function classNames(...classes) {
 }
 
 export default function Home() {
-  const contractAddress: string = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const contractAddress: string = "0x30c9163CcF2Bd6Ac8BFe640df329399174E4C1be";
   const toastOptions: Object = {
     position: "bottom-right",
     autoClose: 5000,
