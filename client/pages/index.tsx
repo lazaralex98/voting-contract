@@ -132,15 +132,13 @@ export default function Home() {
           gasLimit: 300000,
         }
       );
-      console.log("Mining...", voteTxn.hash);
-      console.log("Sending vote...");
+      console.log("Sending vote...", voteTxn.hash);
 
       // TODO make a loader while the user waits
       // TODO BUG the transaction fails
       await voteTxn.wait();
 
-      console.log("Mined -- ", voteTxn.hash);
-      console.log("Voted for ", id);
+      console.log("Successfully voted for ", id);
 
       getAllProposals();
       return true;
