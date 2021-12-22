@@ -40,12 +40,12 @@ contract VotingContract {
 
   // returns an array with all current Proposal structs
   // hint for the frontend: the Proposal structs will be non-associative arrays that you need to convert to objects
-  function getProposals() public view returns (Proposal[] memory) {
+  function getProposals() external view returns (Proposal[] memory) {
     return proposals;
   }
 
   // returns a Proposal based on its index in the proposals array
-  function getProposal(uint256 _index) public view returns (Proposal memory) {
+  function getProposal(uint256 _index) external view returns (Proposal memory) {
     return proposals[_index];
   }
 
@@ -54,13 +54,13 @@ contract VotingContract {
     string memory _proposal_name,
     string memory _proposal_description,
     uint256 _payAmount
-  ) public payable {
+  ) external payable {
     Voter storage sender = voters[msg.sender];
     require(!sender.proposed, "You already proposed.");
 
     require(_payAmount <= 0.002 ether, "Insufficient Ether provided");
 
-    (bool success, ) = owner.call{ value: _payAmount }("");
+    (bool success, ) = owner.call{ value: msg.value }("");
     require(success, "Failed to send money");
 
     proposals.push(Proposal(_proposal_name, _proposal_description, 1));
@@ -70,7 +70,7 @@ contract VotingContract {
   }
 
   // attempts to vote a proposal based on its index in the array of proposals
-  function voteProposal(uint256 _index, uint256 _payAmount) public payable {
+  function voteProposal(uint256 _index, uint256 _payAmount) external payable {
     // require that voter has never voted before
     Voter storage sender = voters[msg.sender];
     require(!sender.voted, "You already voted.");
@@ -80,7 +80,7 @@ contract VotingContract {
     require(_payAmount <= cost, "Insufficient Ether provided");
 
     // require transaction to be confirmed
-    (bool success, ) = owner.call{ value: _payAmount }("");
+    (bool success, ) = owner.call{ value: msg.value }("");
     require(success, "Failed to send money");
 
     // change vote count and mark voter as 'voted'
