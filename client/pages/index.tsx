@@ -11,23 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 declare let window: any;
 
-const currentProposals = [
-  {
-    name: "Web3 Vlog",
-    description: "I'd like you to make videos about web3.",
-    voteCount: 3,
-  },
-  {
-    name: "UI Reviews",
-    description: "I'd like you to make videos reviewing UIs.",
-    voteCount: 1,
-  },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export default function Home() {
   const contractAddress: string = "0x30c9163CcF2Bd6Ac8BFe640df329399174E4C1be";
   const toastOptions: Object = {
@@ -230,6 +213,9 @@ export default function Home() {
       return false;
     }
   }
+
+  // TODO conditional rendering for people that have already voted
+  // TODO test if money goes through if you use a different wallet address
 
   return (
     <div>

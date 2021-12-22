@@ -58,7 +58,8 @@ contract VotingContract {
     Voter storage sender = voters[msg.sender];
     require(!sender.proposed, "You already proposed.");
 
-    require(_payAmount <= 0.002 ether, "Insufficient Ether provided");
+    uint256 cost = 0.002 ether;
+    require(_payAmount <= cost, "Insufficient Ether provided");
 
     (bool success, ) = owner.call{ value: msg.value }("");
     require(success, "Failed to send money");
