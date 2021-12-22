@@ -6,7 +6,9 @@ import votingAbi from "../utils/votingAbi.json";
 import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { Dialog, Transition } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/outline";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 declare let window: any;
 
 const currentProposals = [
@@ -28,6 +30,15 @@ function classNames(...classes) {
 
 export default function Home() {
   const contractAddress = "0x2549cE3794183983671F5f6b47eaac847Bfe1685";
+  const toastOptions: Object = {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
 
   const [account, setAccount] = useState("");
   const [allProposals, setAllProposals] = useState([]);
@@ -46,6 +57,7 @@ export default function Home() {
       const { ethereum } = window;
       if (!ethereum) {
         console.warn("Make sure you have MetaMask connected");
+        toast.warn("Make sure MetaMask is connected.", toastOptions);
         return false;
       }
 
@@ -53,9 +65,13 @@ export default function Home() {
         method: "eth_requestAccounts",
       });
       setAccount(accounts[0]);
+
+      console.log("Connected MetaMask: ", accounts[0]);
+      toast("We connected to MetaMask!", toastOptions);
       return true;
     } catch (error) {
       console.error("Error: ", error);
+      toast.error("An unexpected error occurred.", toastOptions);
       return false;
     }
   }
@@ -84,6 +100,7 @@ export default function Home() {
       const { ethereum } = window;
       if (!ethereum) {
         console.warn("Make sure you have MetaMask connected");
+        toast.warn("Make sure MetaMask is connected.", toastOptions);
         return false;
       }
 
@@ -102,6 +119,7 @@ export default function Home() {
       return true;
     } catch (error) {
       console.error("Error:", error);
+      toast.error("An unexpected error occurred.", toastOptions);
       return false;
     }
   }
@@ -118,6 +136,8 @@ export default function Home() {
       const { ethereum } = window;
       if (!ethereum) {
         console.warn("Make sure you have MetaMask connected");
+        toast.warn("Make sure MetaMask is connected.", toastOptions);
+        setLoading(false);
         return false;
       }
 
@@ -141,6 +161,7 @@ export default function Home() {
       // TODO BUG the transaction fails
       await voteTxn.wait();
 
+      toast("You voted for " + id, toastOptions);
       console.log("Successfully voted for ", id);
 
       setLoading(false);
@@ -148,6 +169,7 @@ export default function Home() {
       return true;
     } catch (error) {
       console.error("Error:", error);
+      toast.error("An unexpected error occurred.", toastOptions);
       setLoading(false);
       return false;
     }
@@ -431,6 +453,8 @@ export default function Home() {
           </div>
         </Dialog>
       </Transition.Root>
+
+      <ToastContainer />
 
       <footer className="flex items-center justify-center w-full h-24 border-t">
         <p className="text-gray-500">
