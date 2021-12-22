@@ -74,7 +74,10 @@ export default function Home() {
       return true;
     } catch (error) {
       console.error("Error: ", error);
-      toast.error("An unexpected error occurred.", toastOptions);
+      toast.error(
+        "An unexpected error occurred when connecting to MetaMask!",
+        toastOptions
+      );
       return false;
     }
   }
@@ -122,7 +125,10 @@ export default function Home() {
       return true;
     } catch (error) {
       console.error("Error:", error);
-      toast.error("An unexpected error occurred.", toastOptions);
+      toast.error(
+        "An unexpected error occurred when fetching proposals.",
+        toastOptions
+      );
       return false;
     }
   }
@@ -172,7 +178,7 @@ export default function Home() {
       return true;
     } catch (error) {
       console.error("Error:", error);
-      toast.error("An unexpected error occurred.", toastOptions);
+      toast.error("An unexpected error occurred when voting.", toastOptions);
       setLoading(false);
       return false;
     }
