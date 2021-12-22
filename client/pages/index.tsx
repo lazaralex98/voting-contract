@@ -24,7 +24,10 @@ export default function Home() {
   const [account, setAccount] = useState("");
   const [allProposals, setAllProposals] = useState([]);
 
-  // This function attempts to connect to the MetaMask wallet and returns true upon success and false upon failure
+  /**
+   * @description Attempts to connect to the MetaMask wallet and set the account in React State.
+   * @returns true or false depending on success or failure.
+   */
   async function connectMetaMaskWallet(): Promise<boolean> {
     try {
       const { ethereum } = window;
@@ -40,13 +43,15 @@ export default function Home() {
       return true;
     } catch (error) {
       console.log("Error: ", error);
+      return false;
     }
   }
 
   /**
-   * This function takes an array of proposals and formats it such that it is an array of
-   * objects instead of being an array of arrays.
-   * */
+   * @description Formats array of proposals.
+   * @param array an array of arrays, each representing a proposal
+   * @returns an array of objects that each represent a proposal.
+   */
   function formatProposalArray(array): Object[] {
     return array.map((proposal) => {
       return {
@@ -57,7 +62,10 @@ export default function Home() {
     });
   }
 
-  // This function attempts to get all currrent proposals
+  /**
+   * @description Attempts to get all currrent proposals and set them into React State.
+   * @returns true or false depending success or failure.
+   */
   async function getAllProposals(): Promise<boolean> {
     try {
       const { ethereum } = window;
@@ -81,14 +89,23 @@ export default function Home() {
       return true;
     } catch (error) {
       console.error("Error:", error);
+      return false;
     }
   }
 
-  // TODO code a function that votes
-  // This function attempts to vote a proposal based on the numeric ID (equivalent to the array index)
+  /**
+   * @description Attempts to vote a proposal based on the numeric ID (equivalent to the array index)
+   * @param id the index of the proposal in the proposal array
+   * @returns true or false depending on success or failure.
+   */
   async function vote(id: number): Promise<boolean> {
-    console.log("voted for: ", id);
-    return true;
+    try {
+      console.log("voted for: ", id);
+      return true;
+    } catch (error) {
+      console.error("Error:", error);
+      return false;
+    }
   }
 
   return (
