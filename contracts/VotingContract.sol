@@ -40,12 +40,12 @@ contract VotingContract {
 
   // returns an array with all current Proposal structs
   // hint for the frontend: the Proposal structs will be non-associative arrays that you need to convert to objects
-  function getProposals() external view returns (Proposal[] memory) {
+  function getProposals() public view returns (Proposal[] memory) {
     return proposals;
   }
 
   // returns a Proposal based on its index in the proposals array
-  function getProposal(uint256 _index) external view returns (Proposal memory) {
+  function getProposal(uint256 _index) public view returns (Proposal memory) {
     return proposals[_index];
   }
 
