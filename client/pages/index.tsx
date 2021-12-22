@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import abi from "../utils/votingAbi.json";
+import votingAbi from "../utils/votingAbi.json";
 declare let window: any;
 
 const currentProposals = [
@@ -78,7 +78,7 @@ export default function Home() {
       const signer = provider.getSigner();
       const votingPortalContract = new ethers.Contract(
         contractAddress,
-        abi.abi,
+        votingAbi.abi,
         signer
       );
       const proposals = await votingPortalContract.getAllProposals();
@@ -95,6 +95,7 @@ export default function Home() {
 
   /**
    * @description Attempts to vote a proposal based on the numeric ID (equivalent to the array index)
+   * @requires user to pay 0.001 ETH
    * @param id the index of the proposal in the proposal array
    * @returns true or false depending on success or failure.
    */
@@ -106,7 +107,30 @@ export default function Home() {
         return false;
       }
 
-      console.log("voted for: ", id);
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      const votingPortalContract = new ethers.Contract(
+        contractAddress,
+        votingAbi.abi,
+        signer
+      );
+
+      const voteTxn = await votingPortalContract.voteProposal(
+        id,
+        ethers.utils.parseEther("0.001"),
+        {
+          gasLimit: 300000,
+        }
+      );
+      console.log("Mining...", voteTxn.hash);
+      console.log("Sending vote...");
+
+      await voteTxn.wait();
+
+      console.log("Mined -- ", voteTxn.hash);
+      console.log("Voted for ", id);
+
+      getAllProposals();
       return true;
     } catch (error) {
       console.error("Error:", error);
