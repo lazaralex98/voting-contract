@@ -29,7 +29,7 @@ function classNames(...classes) {
 }
 
 export default function Home() {
-  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const contractAddress: string = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   const toastOptions: Object = {
     position: "bottom-right",
     autoClose: 5000,
@@ -73,7 +73,7 @@ export default function Home() {
       getAllProposals();
       return true;
     } catch (error) {
-      console.error("Error: ", error);
+      console.error("Error when connecting MetaMask: ", error);
       toast.error(
         "An unexpected error occurred when connecting to MetaMask!",
         toastOptions
@@ -117,14 +117,16 @@ export default function Home() {
         votingAbi.abi,
         signer
       );
-      const proposals = await votingPortalContract.getProposals();
+      const proposals = await votingPortalContract.getProposals({
+        gasLimit: 300000,
+      });
 
       const formatedProposals = formatProposalArray(proposals);
 
       setAllProposals(formatedProposals);
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error when fetching proposals:", error);
       toast.error(
         "An unexpected error occurred when fetching proposals.",
         toastOptions
@@ -154,7 +156,9 @@ export default function Home() {
         votingAbi.abi,
         signer
       );
-      const proposal = await votingPortalContract.getProposal(id);
+      const proposal = await votingPortalContract.getProposal(id, {
+        gasLimit: 300000,
+      });
 
       const formatedProposal = {
         name: proposal[0],
@@ -164,7 +168,7 @@ export default function Home() {
 
       return formatedProposal;
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error when fetching proposal with id " + id + ": ", error);
       toast.error(
         "An unexpected error occurred when fetching proposal with id of:" + id,
         toastOptions
@@ -220,7 +224,7 @@ export default function Home() {
       getAllProposals();
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error when voting for id " + id + ": ", error);
       toast.error("An unexpected error occurred when voting.", toastOptions);
       setLoading(false);
       return false;
