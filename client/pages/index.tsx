@@ -6,6 +6,11 @@ import votingAbi from "../utils/votingAbi.json";
 import { Fragment } from "react";
 import { Popover, Disclosure, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import {
+  CalendarIcon,
+  LocationMarkerIcon,
+  UsersIcon,
+} from "@heroicons/react/solid";
 
 const navigation = [
   { name: "Product", href: "#" },
@@ -160,7 +165,7 @@ export default function Home() {
       </Head>
 
       {/* Navbar */}
-      <Disclosure as="nav" className="bg-white shadow sticky top-0 z-10">
+      <Disclosure as="nav" className="bg-white shadow">
         {({ open }) => (
           <div>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -196,7 +201,7 @@ export default function Home() {
                   <div className="flex-shrink-0">
                     {account ? (
                       <button
-                        onClick={connectMetaMaskWallet}
+                        // TODO create a propose() function that will be used here onClick
                         type="button"
                         className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                       >
@@ -275,35 +280,72 @@ export default function Home() {
         </div>
       </div>
 
-      <main
-        id="main"
-        className="flex flex-col items-center justify-center w-full flex-1 px-12 sm:px-24 md:px-28 lg:px-32 xl:px-64"
-      >
-        <section className="w-full p-8 my-8 border-2 border-dashed border-gray-400 rounded">
-          <h2 className="text-red-500 text-2xl font-medium mb-4">
-            All current proposals
-          </h2>
-          <ul className="text-gray-800">
-            {currentProposals.map(({ name, description, voteCount }, index) => (
-              <li key={index} className="mb-8">
-                <p className="text-xl mb-2">
-                  "{name}" with{" "}
-                  <mark className="bg-yellow-300 px-1">{voteCount} votes</mark>.{" "}
-                  <button
-                    className="inline-block px-2 bg-blue-100 rounded-sm text-blue-600 transition-colors hover:bg-blue-50"
-                    onClick={(event: any) => {
-                      vote(index);
-                    }}
-                  >
-                    Vote this
-                  </button>
-                </p>
-                <div className="text-gray-700">{description}</div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </main>
+      <div className="relative bg-gray-50 overflow-hidden">
+        <div className="relative pt-6 pb-16 sm:pb-24">
+          <div className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
+            <div className="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
+              <div className="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap">
+                <div className="ml-4 mt-4">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">
+                    Video Proposals
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500">
+                    To vote click on one of the proposals below.
+                  </p>
+                </div>
+                <div className="ml-4 mt-4 flex-shrink-0">
+                  {account ? (
+                    <button
+                      // TODO create a propose() function that will be used here onClick
+                      type="button"
+                      className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Propose subject
+                    </button>
+                  ) : (
+                    <button
+                      onClick={connectMetaMaskWallet}
+                      type="button"
+                      className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Connect wallet
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="bg-white shadow overflow-hidden sm:rounded-md">
+              <ul role="list" className="divide-y divide-gray-200">
+                {currentProposals.map((proposal, index) => (
+                  <li key={index}>
+                    <a href="#" className="block hover:bg-gray-50">
+                      <div className="px-4 py-4 sm:px-6">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-medium text-blue-600 truncate">
+                            {proposal.name}
+                          </p>
+                          <div className="ml-2 flex-shrink-0 flex">
+                            <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              {proposal.voteCount} votes
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mt-2 sm:flex sm:justify-between">
+                          <div className="sm:flex">
+                            <p className="flex items-center text-sm text-gray-500">
+                              {proposal.description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <footer className="flex items-center justify-center w-full h-24 border-t">
         <p className="text-gray-500">
