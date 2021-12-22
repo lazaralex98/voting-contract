@@ -135,6 +135,8 @@ export default function Home() {
       console.log("Mining...", voteTxn.hash);
       console.log("Sending vote...");
 
+      // TODO make a loader while the user waits
+      // TODO BUG the transaction fails
       await voteTxn.wait();
 
       console.log("Mined -- ", voteTxn.hash);
