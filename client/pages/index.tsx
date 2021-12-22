@@ -215,7 +215,7 @@ export default function Home() {
   }
 
   // TODO conditional rendering for people that have already voted
-  // TODO test if money goes through if you use a different wallet address
+  // TODO money doesn't go through
 
   return (
     <div>
