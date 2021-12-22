@@ -194,13 +194,23 @@ export default function Home() {
                 </div>
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <button
-                      onClick={connectMetaMaskWallet}
-                      type="button"
-                      className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      <span>Connect Wallet</span>
-                    </button>
+                    {account ? (
+                      <button
+                        onClick={connectMetaMaskWallet}
+                        type="button"
+                        className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      >
+                        <span>Propose subject</span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={connectMetaMaskWallet}
+                        type="button"
+                        className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      >
+                        <span>Connect wallet</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -241,11 +251,23 @@ export default function Home() {
               </p>
               <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
                 <div className="rounded-md shadow">
-                  <Link href="#main">
-                    <a className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
-                      Scroll down
-                    </a>
-                  </Link>
+                  {account ? (
+                    <button
+                      type="button"
+                      disabled={true}
+                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 md:py-4 md:text-lg md:px-10"
+                    >
+                      <span>Your wallet is connected, scroll down to vote</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={connectMetaMaskWallet}
+                      type="button"
+                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
+                    >
+                      <span>Connect wallet</span>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
