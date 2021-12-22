@@ -70,6 +70,7 @@ export default function Home() {
 
       console.log("Connected MetaMask: ", accounts[0]);
       toast("We connected to MetaMask!", toastOptions);
+      getAllProposals();
       return true;
     } catch (error) {
       console.error("Error: ", error);
