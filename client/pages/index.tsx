@@ -134,6 +134,46 @@ export default function Home() {
   }
 
   /**
+   * @description Attempts to get proposal based on id and returns it as an object
+   * @param id the index of the proposal in the proposal array
+   * @returns proposal object or false depending success or failure.
+   */
+  async function getProposal(id: number): Promise<any> {
+    try {
+      const { ethereum } = window;
+      if (!ethereum) {
+        console.warn("Make sure you have MetaMask connected");
+        toast.warn("Make sure MetaMask is connected.", toastOptions);
+        return false;
+      }
+
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      const votingPortalContract = new ethers.Contract(
+        contractAddress,
+        votingAbi.abi,
+        signer
+      );
+      const proposal = await votingPortalContract.getProposal(id);
+
+      const formatedProposal = {
+        name: proposal[0],
+        description: proposal[1],
+        voteCount: proposal[2].toNumber(),
+      };
+
+      return formatedProposal;
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(
+        "An unexpected error occurred when fetching proposal with id of:" + id,
+        toastOptions
+      );
+      return false;
+    }
+  }
+
+  /**
    * @description Attempts to vote a proposal based on the numeric ID (equivalent to the array index)
    * @requires user to pay 0.001 ETH
    * @param id the index of the proposal in the proposal array
@@ -165,7 +205,10 @@ export default function Home() {
           gasLimit: 300000,
         }
       );
-      console.log("Sending vote...", voteTxn.hash);
+      console.log(
+        "Sending vote for id " + id + " with transaction hash:",
+        voteTxn.hash
+      );
 
       // TODO BUG the transaction fails
       await voteTxn.wait();
@@ -358,7 +401,7 @@ export default function Home() {
                       <div className="px-4 py-4 sm:px-6">
                         <div className="flex items-center justify-between">
                           <p className="text-sm font-medium text-blue-600 truncate">
-                            {proposal.name}
+                            {proposal.name} - id: {index}
                           </p>
                           <div className="ml-2 flex-shrink-0 flex">
                             <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
