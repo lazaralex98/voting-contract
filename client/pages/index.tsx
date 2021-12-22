@@ -32,7 +32,7 @@ export default function Home() {
     try {
       const { ethereum } = window;
       if (!ethereum) {
-        console.log("Make sure you have MetaMask connected");
+        console.warn("Make sure you have MetaMask connected");
         return false;
       }
 
@@ -42,7 +42,7 @@ export default function Home() {
       setAccount(accounts[0]);
       return true;
     } catch (error) {
-      console.log("Error: ", error);
+      console.error("Error: ", error);
       return false;
     }
   }
@@ -70,7 +70,7 @@ export default function Home() {
     try {
       const { ethereum } = window;
       if (!ethereum) {
-        console.log("Make sure you have MetaMask connected");
+        console.warn("Make sure you have MetaMask connected");
         return false;
       }
 
@@ -100,6 +100,12 @@ export default function Home() {
    */
   async function vote(id: number): Promise<boolean> {
     try {
+      const { ethereum } = window;
+      if (!ethereum) {
+        console.warn("Make sure you have MetaMask connected");
+        return false;
+      }
+
       console.log("voted for: ", id);
       return true;
     } catch (error) {
