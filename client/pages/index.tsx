@@ -3,21 +3,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import votingAbi from "../utils/votingAbi.json";
-import { Fragment } from "react";
-import { Popover, Disclosure, Transition } from "@headlessui/react";
+import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
-import {
-  CalendarIcon,
-  LocationMarkerIcon,
-  UsersIcon,
-} from "@heroicons/react/solid";
-
-const navigation = [
-  { name: "Product", href: "#" },
-  { name: "Features", href: "#" },
-  { name: "Marketplace", href: "#" },
-  { name: "Company", href: "#" },
-];
 declare let window: any;
 
 const currentProposals = [
@@ -42,6 +29,10 @@ export default function Home() {
 
   const [account, setAccount] = useState("");
   const [allProposals, setAllProposals] = useState([]);
+
+  useEffect(() => {
+    getAllProposals();
+  }, []);
 
   /**
    * @description Attempts to connect to the MetaMask wallet and set the account in React State.
@@ -100,7 +91,7 @@ export default function Home() {
         votingAbi.abi,
         signer
       );
-      const proposals = await votingPortalContract.getAllProposals();
+      const proposals = await votingPortalContract.getProposals();
 
       const formatedProposals = formatProposalArray(proposals);
 
@@ -316,9 +307,18 @@ export default function Home() {
             </div>
             <div className="bg-white shadow overflow-hidden sm:rounded-md">
               <ul role="list" className="divide-y divide-gray-200">
-                {currentProposals.map((proposal, index) => (
+                {allProposals.map((proposal, index) => (
                   <li key={index}>
-                    <a href="#" className="block hover:bg-gray-50">
+                    <a
+                      onClick={() => {
+                        if (account) {
+                          vote(index);
+                        }
+                      }}
+                      className={`block  ${
+                        account ? "hover:bg-gray-50 cursor-pointer" : ""
+                      }`}
+                    >
                       <div className="px-4 py-4 sm:px-6">
                         <div className="flex items-center justify-between">
                           <p className="text-sm font-medium text-blue-600 truncate">
