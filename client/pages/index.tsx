@@ -52,7 +52,7 @@ export default function Home() {
    * @param array an array of arrays, each representing a proposal
    * @returns an array of objects that each represent a proposal.
    */
-  function formatProposalArray(array): Object[] {
+  function formatProposalArray(array: any[][]): Object[] {
     return array.map((proposal) => {
       return {
         name: proposal[0],
