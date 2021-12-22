@@ -31,10 +31,11 @@ contract VotingContract {
 
   // on deployment we create an initial proposal and set prices
   constructor(string memory _proposal_name, string memory _proposal_description)
+    payable
   {
     owner = payable(msg.sender);
 
-    proposals.push(Proposal(_proposal_name, _proposal_description, 0));
+    proposals.push(Proposal(_proposal_name, _proposal_description, 1));
   }
 
   // returns an array with all current Proposal structs
@@ -62,25 +63,31 @@ contract VotingContract {
     (bool success, ) = owner.call{ value: _payAmount }("");
     require(success, "Failed to send money");
 
-    proposals.push(Proposal(_proposal_name, _proposal_description, 0));
+    proposals.push(Proposal(_proposal_name, _proposal_description, 1));
     sender.proposed = true;
 
     emit NewProposalOrVote(msg.sender, block.timestamp, "proposal");
   }
 
-  // check if address has voted and if enough funds and vote for a Proposal based on its index in the proposals array
+  // attempts to vote a proposal based on its index in the array of proposals
   function voteProposal(uint256 _index, uint256 _payAmount) public payable {
+    // require that voter has never voted before
     Voter storage sender = voters[msg.sender];
     require(!sender.voted, "You already voted.");
 
-    require(_payAmount <= 0.001 ether, "Insufficient Ether provided");
+    // require that voter has set the corect amount of ETH to be sent
+    uint256 cost = 0.001 ether;
+    require(_payAmount <= cost, "Insufficient Ether provided");
 
+    // require transaction to be confirmed
     (bool success, ) = owner.call{ value: _payAmount }("");
     require(success, "Failed to send money");
 
+    // change vote count and mark voter as 'voted'
     proposals[_index].voteCount += 1;
     sender.voted = true;
 
+    // emit an event
     emit NewProposalOrVote(msg.sender, block.timestamp, "vote");
   }
 }
