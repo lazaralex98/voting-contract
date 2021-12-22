@@ -45,7 +45,9 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getAllProposals();
+    if (account) {
+      getAllProposals();
+    }
   }, []);
 
   /**
