@@ -11,7 +11,16 @@ import "react-toastify/dist/ReactToastify.css";
 
 declare let window: any;
 
-// TODO clean this up & implement some types/interfaces
+interface formatedProposal {
+  name: string;
+  description: string;
+  voteCount: number;
+}
+
+interface voter {
+  voted: boolean;
+  proposed: boolean;
+}
 
 export default function Home() {
   const contractAddress: string = "0xEA70184e6337eEe02233Ff8252C0e53AE5380Da2";
@@ -25,10 +34,10 @@ export default function Home() {
     progress: undefined,
   };
 
-  const [account, setAccount] = useState("");
-  const [allProposals, setAllProposals] = useState([]);
-  const [voter, setVoter] = useState({ voted: false, proposed: false });
-  const [loading, setLoading] = useState(false);
+  const [account, setAccount] = useState<string>("");
+  const [allProposals, setAllProposals] = useState<formatedProposal[]>([]);
+  const [voter, setVoter] = useState<voter>({ voted: false, proposed: false });
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (account) {
@@ -78,7 +87,7 @@ export default function Home() {
    * @param array an array of arrays, each representing a proposal
    * @returns an array of objects that each represent a proposal.
    */
-  function formatProposalArray(array: any[][]): Object[] {
+  function formatProposalArray(array: any[][]): formatedProposal[] {
     return array.map((proposal) => {
       return {
         name: proposal[0],
