@@ -57,7 +57,7 @@ contract VotingContract {
     require(!sender.proposed, "You already proposed.");
 
     uint256 cost = 0.002 ether;
-    require(msg.value <= cost, "Insufficient Ether provided");
+    require(msg.value >= cost, "Insufficient Ether provided");
 
     (bool success, ) = owner.call{ value: msg.value }("");
     require(success, "Failed to send money");
@@ -76,7 +76,7 @@ contract VotingContract {
 
     // require that voter has set the correct amount of ETH to be sent
     uint256 cost = 0.001 ether;
-    require(msg.value <= cost, "Insufficient Ether provided");
+    require(msg.value >= cost, "Insufficient Ether provided");
 
     // TODO it doesn't send any money
 

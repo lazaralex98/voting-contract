@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 declare let window: any;
 
 export default function Home() {
-  const contractAddress: string = "0x340b1f76282d5b41EB6729c993246A3c4EDC5e67";
+  const contractAddress: string = "0xbeB9F2682eb22e3da1aE1f611EF7b32561d28fB3";
   const toastOptions: Object = {
     position: "bottom-right",
     autoClose: 5000,
