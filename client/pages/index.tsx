@@ -185,13 +185,10 @@ export default function Home() {
         signer
       );
 
-      const voteTxn = await votingPortalContract.voteProposal(
-        id,
-        ethers.utils.parseEther("0.001"),
-        {
-          gasLimit: 300000,
-        }
-      );
+      const voteTxn = await votingPortalContract.voteProposal(id, {
+        value: ethers.utils.parseEther("0.001"),
+        gasLimit: 300000,
+      });
       console.log(
         "Sending vote for id " + id + " with transaction hash:",
         voteTxn.hash
