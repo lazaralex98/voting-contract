@@ -49,17 +49,21 @@ export default function Home() {
         return false;
       }
 
+      setLoading(true);
+
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
       setAccount(accounts[0]);
 
       console.log("Connected MetaMask: ", accounts[0]);
-      toast("We connected to MetaMask!", toastOptions);
       getVoter();
       getAllProposals();
+      setLoading(false);
+      toast("We connected to MetaMask!", toastOptions);
       return true;
     } catch (error) {
+      setLoading(false);
       console.error("Error when connecting MetaMask: ", error);
       toast.error(
         "An unexpected error occurred when connecting to MetaMask!",
