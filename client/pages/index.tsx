@@ -57,6 +57,7 @@ export default function Home() {
   function handleSubmit(event) {
     event.preventDefault();
     console.log(proposalForm);
+    propose(proposalForm.name, proposalForm.description);
   }
 
   // TODO I need to make a form that will use propose() to send proposals
