@@ -25,7 +25,7 @@ describe("Voting", function () {
     });
 
     // vote for initial proposal & test it
-    await votingContract.voteProposal(0, ethers.utils.parseEther("0.001"), {
+    await votingContract.voteProposal(0, {
       gasLimit: 300000,
     });
     proposal = await votingContract.getProposal(0);
@@ -73,7 +73,6 @@ describe("Proposal", function () {
     await votingContract.sendProposal(
       "Landing Page Reviews",
       "We want more landing page reviews.",
-      ethers.utils.parseEther("0.002"),
       {
         gasLimit: 300000,
       }

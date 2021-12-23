@@ -51,16 +51,15 @@ contract VotingContract {
   // checks if address has proposed yet and if enough funds and then add his new Proposal to the proposals array
   function sendProposal(
     string memory _proposal_name,
-    string memory _proposal_description,
-    uint256 _payAmount
+    string memory _proposal_description
   ) external payable {
     Voter storage sender = voters[msg.sender];
     require(!sender.proposed, "You already proposed.");
 
     uint256 cost = 0.002 ether;
-    require(_payAmount <= cost, "Insufficient Ether provided");
+    require(msg.value <= cost, "Insufficient Ether provided");
 
-    (bool success, ) = owner.call{ value: _payAmount }("");
+    (bool success, ) = owner.call{ value: msg.value }("");
     require(success, "Failed to send money");
 
     proposals.push(Proposal(_proposal_name, _proposal_description, 1));
@@ -70,19 +69,19 @@ contract VotingContract {
   }
 
   // attempts to vote a proposal based on its index in the array of proposals
-  function voteProposal(uint256 _index, uint256 _payAmount) external payable {
+  function voteProposal(uint256 _index) external payable {
     // require that voter has never voted before
     Voter storage sender = voters[msg.sender];
     require(!sender.voted, "You already voted.");
 
     // require that voter has set the correct amount of ETH to be sent
     uint256 cost = 0.001 ether;
-    require(_payAmount <= cost, "Insufficient Ether provided");
+    require(msg.value <= cost, "Insufficient Ether provided");
 
     // TODO it doesn't send any money
 
     // require transaction to be confirmed
-    (bool success, ) = owner.call{ value: _payAmount }("");
+    (bool success, ) = owner.call{ value: msg.value }("");
     require(success, "Failed to send money");
 
     // change vote count and mark voter as 'voted'
