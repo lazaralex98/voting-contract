@@ -22,6 +22,11 @@ interface voter {
   proposed: boolean;
 }
 
+interface proposalInput {
+  name: string;
+  description: string;
+}
+
 export default function Home() {
   const contractAddress: string = "0xEA70184e6337eEe02233Ff8252C0e53AE5380Da2";
   const toastOptions: Object = {
@@ -38,6 +43,21 @@ export default function Home() {
   const [allProposals, setAllProposals] = useState<formatedProposal[]>([]);
   const [voter, setVoter] = useState<voter>({ voted: false, proposed: false });
   const [loading, setLoading] = useState<boolean>(false);
+  const [proposalForm, setProposalForm] = useState<proposalInput>({
+    name: "",
+    description: "",
+  });
+
+  function handleChange(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    setProposalForm((values) => ({ ...values, [name]: value }));
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    console.log(proposalForm);
+  }
 
   // TODO I need to make a form that will use propose() to send proposals
 
@@ -535,6 +555,95 @@ export default function Home() {
                 ))}
               </ul>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative bg-gray-50 overflow-hidden">
+        <div className="relative pt-6 pb-16 sm:pb-24">
+          <div className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-8 divide-y divide-gray-200"
+            >
+              <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+                <div>
+                  <div>
+                    <h3 className="text-lg leading-6 font-medium text-gray-900">
+                      Submit a proposal
+                    </h3>
+                    <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                      This information will be displayed publicly so be careful
+                      what you share.
+                    </p>
+                  </div>
+
+                  <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                    <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <label
+                        htmlFor="username"
+                        className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                      >
+                        Give the proposal a name
+                      </label>
+                      <div className="mt-1 sm:mt-0 sm:col-span-2">
+                        <div className="max-w-lg flex rounded-md shadow-sm">
+                          <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            value={proposalForm.name || ""}
+                            onChange={handleChange}
+                            autoComplete="proposalName"
+                            className="flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 rounded-md sm:text-sm border-gray-300"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                      <label
+                        htmlFor="about"
+                        className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                      >
+                        Describe the proposal
+                      </label>
+                      <div className="mt-1 sm:mt-0 sm:col-span-2">
+                        <textarea
+                          id="description"
+                          name="description"
+                          value={proposalForm.description || ""}
+                          onChange={handleChange}
+                          rows={3}
+                          className="max-w-lg shadow-sm block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300 rounded-md"
+                          defaultValue={""}
+                        />
+                        <p className="mt-2 text-sm text-gray-500">
+                          Write a few sentences about what you'd like to
+                          propose.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="pt-5">
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
