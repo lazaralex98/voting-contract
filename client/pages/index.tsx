@@ -52,8 +52,6 @@ export default function Home() {
     propose(proposalForm.name, proposalForm.description);
   }
 
-  // TODO I need to make a form that will use propose() to send proposals
-
   useEffect(() => {
     if (account) {
       getAllProposals();
@@ -385,7 +383,6 @@ export default function Home() {
                   <div className="flex-shrink-0">
                     {account ? (
                       <a
-                        // TODO create a propose() function that will be used here onClick
                         href="#proposalForm"
                         className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                       >
@@ -490,7 +487,6 @@ export default function Home() {
                 <div className="ml-4 mt-4 flex-shrink-0">
                   {account ? (
                     <a
-                      // TODO create a propose() function that will be used here onClick
                       href="#proposalForm"
                       className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
