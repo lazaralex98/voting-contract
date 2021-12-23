@@ -8,24 +8,9 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { Dialog, Transition } from "@headlessui/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { formatedProposal, voter, proposalInput } from "../utils/interfaces";
 
 declare let window: any;
-
-interface formatedProposal {
-  name: string;
-  description: string;
-  voteCount: number;
-}
-
-interface voter {
-  voted: boolean;
-  proposed: boolean;
-}
-
-interface proposalInput {
-  name: string;
-  description: string;
-}
 
 export default function Home() {
   const contractAddress: string = "0xEA70184e6337eEe02233Ff8252C0e53AE5380Da2";
@@ -48,15 +33,22 @@ export default function Home() {
     description: "",
   });
 
+  /**
+   * @description attempts to store form data in React State
+   * @param event the event of the input or textarea field
+   */
   function handleChange(event) {
     const name = event.target.name;
     const value = event.target.value;
     setProposalForm((values) => ({ ...values, [name]: value }));
   }
 
+  /**
+   * @description calls the propose() function with data from the proposalForm React state
+   * @param event the event of the input or textarea field
+   */
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(proposalForm);
     propose(proposalForm.name, proposalForm.description);
   }
 
