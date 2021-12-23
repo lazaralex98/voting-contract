@@ -61,7 +61,7 @@ contract VotingContract {
     uint256 cost = 0.002 ether;
     require(_payAmount <= cost, "Insufficient Ether provided");
 
-    (bool success, ) = owner.call{ value: msg.value }("");
+    (bool success, ) = owner.call{ value: _payAmount }("");
     require(success, "Failed to send money");
 
     proposals.push(Proposal(_proposal_name, _proposal_description, 1));
@@ -83,7 +83,7 @@ contract VotingContract {
     // TODO it doesn't send any money
 
     // require transaction to be confirmed
-    (bool success, ) = owner.call{ value: msg.value }("");
+    (bool success, ) = owner.call{ value: _payAmount }("");
     require(success, "Failed to send money");
 
     // change vote count and mark voter as 'voted'
