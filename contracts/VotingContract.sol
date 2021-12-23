@@ -48,6 +48,10 @@ contract VotingContract {
     return proposals[_index];
   }
 
+  function getVoter() public view returns (Voter memory) {
+    return voters[msg.sender];
+  }
+
   // checks if address has proposed yet and if enough funds and then add his new Proposal to the proposals array
   function sendProposal(
     string memory _proposal_name,

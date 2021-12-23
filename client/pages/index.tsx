@@ -11,8 +11,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 declare let window: any;
 
+// TODO clean this up & implement some types/interfaces
+
 export default function Home() {
-  const contractAddress: string = "0xbeB9F2682eb22e3da1aE1f611EF7b32561d28fB3";
+  const contractAddress: string = "0xEA70184e6337eEe02233Ff8252C0e53AE5380Da2";
   const toastOptions: Object = {
     position: "bottom-right",
     autoClose: 5000,
@@ -25,6 +27,7 @@ export default function Home() {
 
   const [account, setAccount] = useState("");
   const [allProposals, setAllProposals] = useState([]);
+  const [voter, setVoter] = useState({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -53,6 +56,7 @@ export default function Home() {
 
       console.log("Connected MetaMask: ", accounts[0]);
       toast("We connected to MetaMask!", toastOptions);
+      getVoter();
       getAllProposals();
       return true;
     } catch (error) {
@@ -78,6 +82,47 @@ export default function Home() {
         voteCount: proposal[2].toNumber(),
       };
     });
+  }
+
+  /**
+   * @description Attempts to get the voter object that matches user's address and sets it into React State.
+   * @returns true or false depending success or failure.
+   */
+  async function getVoter(): Promise<any> {
+    try {
+      const { ethereum } = window;
+      if (!ethereum) {
+        console.warn("Make sure you have MetaMask connected");
+        toast.warn("Make sure MetaMask is connected.", toastOptions);
+        return false;
+      }
+
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      const votingPortalContract = new ethers.Contract(
+        contractAddress,
+        votingAbi.abi,
+        signer
+      );
+      const voter = await votingPortalContract.getVoter({
+        gasLimit: 300000,
+      });
+
+      const formatedVoter = {
+        voted: voter[0],
+        proposed: voter[1],
+      };
+
+      setVoter(formatedVoter);
+      return true;
+    } catch (error) {
+      console.error("Error when fetching voter:", error);
+      toast.error(
+        "An unexpected error occurred when fetching voter.",
+        toastOptions
+      );
+      return false;
+    }
   }
 
   /**
@@ -211,7 +256,6 @@ export default function Home() {
   }
 
   // TODO conditional rendering for people that have already voted
-  // TODO money doesn't go through
 
   return (
     <div>
@@ -294,47 +338,53 @@ export default function Home() {
       </Disclosure>
 
       {/* Hero section */}
-      <div className="relative bg-gray-50 overflow-hidden">
-        <div className="relative pt-6 pb-16 sm:pb-24">
-          <div className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
-            <div className="text-center">
-              <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block xl:inline">
-                  Propose &amp; vote subjects
-                </span>{" "}
-                <span className="block text-blue-600 xl:inline">
-                  for your favorite content creators
-                </span>
-              </h1>
-              <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                You can use blockchain technology and ETH to help your favorite
-                content creators decide what to do next.
-              </p>
-              <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-                <div className="rounded-md shadow">
-                  {account ? (
-                    <button
-                      type="button"
-                      disabled={true}
-                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 md:py-4 md:text-lg md:px-10"
-                    >
-                      <span>Your wallet is connected, scroll down to vote</span>
-                    </button>
-                  ) : (
-                    <button
-                      onClick={connectMetaMaskWallet}
-                      type="button"
-                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
-                    >
-                      <span>Connect MetaMask</span>
-                    </button>
-                  )}
+      {account ? (
+        ""
+      ) : (
+        <div className="relative bg-gray-50 overflow-hidden">
+          <div className="relative pt-6 pb-16 sm:pb-24">
+            <div className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
+              <div className="text-center">
+                <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                  <span className="block xl:inline">
+                    Propose &amp; vote subjects
+                  </span>{" "}
+                  <span className="block text-blue-600 xl:inline">
+                    for your favorite content creators
+                  </span>
+                </h1>
+                <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+                  You can use blockchain technology and ETH to help your
+                  favorite content creators decide what to do next.
+                </p>
+                <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+                  <div className="rounded-md shadow">
+                    {account ? (
+                      <button
+                        type="button"
+                        disabled={true}
+                        className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 md:py-4 md:text-lg md:px-10"
+                      >
+                        <span>
+                          Your wallet is connected, scroll down to vote
+                        </span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={connectMetaMaskWallet}
+                        type="button"
+                        className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
+                      >
+                        <span>Connect MetaMask</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="relative bg-gray-50 overflow-hidden">
         <div className="relative pt-6 pb-16 sm:pb-24">
