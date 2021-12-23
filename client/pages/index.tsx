@@ -194,7 +194,6 @@ export default function Home() {
         voteTxn.hash
       );
 
-      // TODO BUG the transaction fails
       await voteTxn.wait();
 
       toast("You voted for " + id, toastOptions);
