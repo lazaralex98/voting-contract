@@ -71,6 +71,14 @@ export default function Home() {
         return false;
       }
 
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const { chainId } = await provider.getNetwork();
+      if (chainId != 4) {
+        console.warn("Make sure you are on Rinkeby Test Network.");
+        toast.warn("Make sure you are on Rinkeby Test Network.", toastOptions);
+        return false;
+      }
+
       setLoading(true);
 
       const accounts = await ethereum.request({
