@@ -391,13 +391,13 @@ export default function Home() {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     {account ? (
-                      <button
+                      <a
                         // TODO create a propose() function that will be used here onClick
-                        type="button"
+                        href="#proposalForm"
                         className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                       >
                         <span>Propose subject</span>
-                      </button>
+                      </a>
                     ) : (
                       <button
                         onClick={connectMetaMaskWallet}
@@ -496,13 +496,13 @@ export default function Home() {
                 </div>
                 <div className="ml-4 mt-4 flex-shrink-0">
                   {account ? (
-                    <button
+                    <a
                       // TODO create a propose() function that will be used here onClick
-                      type="button"
+                      href="#proposalForm"
                       className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
                       Propose subject
-                    </button>
+                    </a>
                   ) : (
                     <button
                       onClick={connectMetaMaskWallet}
@@ -534,7 +534,7 @@ export default function Home() {
                       <div className="px-4 py-4 sm:px-6">
                         <div className="flex items-center justify-between">
                           <p className="text-sm font-medium text-blue-600 truncate">
-                            {proposal.name} - id: {index}
+                            {proposal.name}
                           </p>
                           <div className="ml-2 flex-shrink-0 flex">
                             <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -563,6 +563,7 @@ export default function Home() {
         <div className="relative pt-6 pb-16 sm:pb-24">
           <div className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
             <form
+              id="proposalForm"
               onSubmit={handleSubmit}
               className="space-y-8 divide-y divide-gray-200"
             >
@@ -616,7 +617,6 @@ export default function Home() {
                           onChange={handleChange}
                           rows={3}
                           className="max-w-lg shadow-sm block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300 rounded-md"
-                          defaultValue={""}
                         />
                         <p className="mt-2 text-sm text-gray-500">
                           Write a few sentences about what you'd like to
