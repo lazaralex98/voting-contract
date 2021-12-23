@@ -39,6 +39,8 @@ export default function Home() {
   const [voter, setVoter] = useState<voter>({ voted: false, proposed: false });
   const [loading, setLoading] = useState<boolean>(false);
 
+  // TODO I need to make a form that will use propose() to send proposals
+
   useEffect(() => {
     if (account) {
       getAllProposals();
@@ -46,7 +48,7 @@ export default function Home() {
   }, []);
 
   /**
-   * @description Attempts to connect to the MetaMask wallet and set the account in React State.
+   * @description Attempts to connect to the MetaMask wallet and set the account in React State, calling getVoter() and getAllProposals() at the end.
    * @returns true or false depending on success or failure.
    */
   async function connectMetaMaskWallet(): Promise<boolean> {
@@ -263,6 +265,64 @@ export default function Home() {
     } catch (error) {
       console.error("Error when voting for id " + id + ": ", error);
       toast.error("An unexpected error occurred when voting.", toastOptions);
+      setLoading(false);
+      return false;
+    }
+  }
+
+  /**
+   * @description Attempts to make a new proposal.
+   * @requires user to pay 0.002 ETH
+   * @param name the name of the new proposal
+   * @param description the description of the new proposal
+   * @returns true or false depending on success or failure.
+   */
+  async function propose(name: string, description: string): Promise<boolean> {
+    try {
+      setLoading(true);
+      const { ethereum } = window;
+      if (!ethereum) {
+        console.warn("Make sure you have MetaMask connected");
+        toast.warn("Make sure MetaMask is connected.", toastOptions);
+        setLoading(false);
+        return false;
+      }
+
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      const votingPortalContract = new ethers.Contract(
+        contractAddress,
+        votingAbi.abi,
+        signer
+      );
+
+      const voteTxn = await votingPortalContract.sendProposal(
+        name,
+        description,
+        {
+          value: ethers.utils.parseEther("0.002"),
+          gasLimit: 300000,
+        }
+      );
+      console.log(
+        "Sending proposal '" + name + "' with transaction hash:",
+        voteTxn.hash
+      );
+
+      await voteTxn.wait();
+
+      toast("You just made a proposal '" + name + "'.", toastOptions);
+      console.log("Successfully made new proposal '" + name + "'");
+
+      setLoading(false);
+      getAllProposals();
+      return true;
+    } catch (error) {
+      console.error("Error when proposing '" + name + "': ", error);
+      toast.error(
+        "An unexpected error occurred when proposing '" + name + "'.",
+        toastOptions
+      );
       setLoading(false);
       return false;
     }
