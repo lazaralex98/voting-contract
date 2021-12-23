@@ -27,7 +27,7 @@ export default function Home() {
 
   const [account, setAccount] = useState("");
   const [allProposals, setAllProposals] = useState([]);
-  const [voter, setVoter] = useState({});
+  const [voter, setVoter] = useState({ voted: false, proposed: false });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -255,8 +255,6 @@ export default function Home() {
     }
   }
 
-  // TODO conditional rendering for people that have already voted
-
   return (
     <div>
       <Head>
@@ -396,7 +394,9 @@ export default function Home() {
                     Video Proposals
                   </h3>
                   <p className="mt-1 text-sm text-gray-500">
-                    To vote click on one of the proposals below.
+                    {voter.voted
+                      ? "You have already voted."
+                      : "To vote click on one of the proposals below."}
                   </p>
                 </div>
                 <div className="ml-4 mt-4 flex-shrink-0">
@@ -426,12 +426,14 @@ export default function Home() {
                   <li key={index}>
                     <a
                       onClick={() => {
-                        if (account) {
+                        if (account && !voter.voted) {
                           vote(index);
                         }
                       }}
                       className={`block  ${
-                        account ? "hover:bg-gray-50 cursor-pointer" : ""
+                        account && !voter.voted
+                          ? "hover:bg-gray-50 cursor-pointer"
+                          : ""
                       }`}
                     >
                       <div className="px-4 py-4 sm:px-6">
