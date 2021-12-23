@@ -4,7 +4,6 @@ pragma solidity ^0.8.10;
 import "hardhat/console.sol";
 
 contract VotingContract {
-  // TODO should be required to pay to vote/propose
   address payable public owner;
 
   // events make it easier to track what happened on the blockchain even though that info is public
@@ -76,7 +75,7 @@ contract VotingContract {
     Voter storage sender = voters[msg.sender];
     require(!sender.voted, "You already voted.");
 
-    // require that voter has set the corect amount of ETH to be sent
+    // require that voter has set the correct amount of ETH to be sent
     uint256 cost = 0.001 ether;
     require(_payAmount <= cost, "Insufficient Ether provided");
 
