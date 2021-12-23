@@ -400,7 +400,9 @@ export default function Home() {
                   <p className="mt-1 text-sm text-gray-500">
                     {voter.voted
                       ? "You have already voted."
-                      : "To vote click on one of the proposals below."}
+                      : account
+                      ? "To vote click on one of the proposals below."
+                      : "Please connect your wallet first."}
                   </p>
                 </div>
                 <div className="ml-4 mt-4 flex-shrink-0">
