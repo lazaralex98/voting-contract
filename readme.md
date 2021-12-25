@@ -37,6 +37,7 @@ In terms of web2 tech, I have used:
 
 ## What I would like to add to it
 
+- I think a WalletConnect integration would be necessary for a real dApp (MetaMask is not very secure)
 - I would like to add a few more tests
 - I would like to split the app in components and organize everything a bit better
 - I'd like to make it such that on deployment of the contract you can change proposal/vote prices so the project can be re-used by other people too
